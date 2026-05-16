@@ -1,0 +1,39 @@
+services:
+  tests:
+    network_mode: host
+    container_name: tests
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: testing
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    build:
+      context: .
+      dockerfile: Dockerfile-test
+      network: host
+    image: server
+    restart: unless-stopped
+    init: true
+    depends_on:
+      testing-db:
+        condition: service_healthy
+    volumes:
+      - ./alembic/versions:/app/alembic/versions
+
+  testing-db:
+    image: postgres:16.13
+    container_name: testing-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: testing
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d testing" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
