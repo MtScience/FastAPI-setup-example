@@ -184,7 +184,7 @@ async def create_employee(
         new_employee = await session.scalar(query)
         return new_employee.to_dto()  # type: ignore[union-attr]
     except sqlalchemy.exc.IntegrityError as exc:
-        # Since the only way for this to happen is foreign key constrain
+        # Since the only way for this to happen is foreign key constraint
         # violation by trying to insert a value with nonexistent department ID,
         # we simply raise the appropriate error
         logger.error(f"Could not create employee: {exc}")
