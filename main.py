@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from src.api.router import router as departments_router
 
 description = """
-Тестовое задание для hitalent. API позволяет:
+Пример реализации REST API с помощью FastAPI. Позволяет:
 - создавать отделы;
 - изменять отделы;
 - удалять отделы (с возможностью каскадного удаления дочерних отделов и
@@ -15,7 +15,7 @@ description = """
 Отслеживается отсутствие циклов в дереве отделов.
 """
 app = FastAPI(
-    title="Hitalent Departments API",
+    title="Departments API",
     description=description,
     version="0.1.0",
 )
